@@ -4,4 +4,7 @@ export const MESSAGES = {
   DELETED: "Resource deleted successfully",
 };
 
-export const ERRORS = {};
+export const ERRORS = {
+  UNAUTHENTICATED: "Access Denied. unauthorized to access route",
+  
+};

@@ -5,13 +5,16 @@ import sequelize from "./database";
 import cors from "cors";
 import helmet from "helmet";
 import router from "./routes";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 const app = express();
 dotenv.config();
 
 // middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(helmet());
 app.use(cors()); // Allows incoming requests from any ip
 

@@ -9,7 +9,7 @@ export const validateLogin = async (req: Request, res: Response, next: NextFunct
     await loginSchema.validateAsync({ ...req.body }, { abortEarly: false, allowUnknown: false });
     next();
   } catch (err: any) {
-    return res.status(401).json({ success: false, error: err.errors });
+    return res.status(401).json({ success: false, error: err.message });
   }
 };
 

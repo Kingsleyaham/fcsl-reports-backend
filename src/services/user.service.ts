@@ -4,7 +4,7 @@ import User from "./../models/user.model";
 
 class UserService {
   async findById(id: number) {
-    return User.findByPk(id);
+    return User.findByPk(id, { attributes: { exclude: ["password"] } });
   }
   async findByUsername(username = "") {
     return User.findOne({ where: { username } });
@@ -13,7 +13,7 @@ class UserService {
     return User.findOne({ where: { email } });
   }
   async findAll() {
-    return User.findAll();
+    return User.findAll({ attributes: { exclude: ["password"] } });
   }
 
   async createUser(newUser: ISignup) {

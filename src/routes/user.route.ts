@@ -7,10 +7,14 @@ import { upload } from "../middlewares/fileUpload.middleware";
 const router = Router();
 
 router.get("/", userController.findAll);
-router.get("/:id", userController.findUser);
-router.put("/:id", validateUser, userController.updateUser);
+
+router
+  .route("/:id")
+  .get(userController.findUser)
+  .put(validateUser, userController.updateUser)
+  .delete(userController.deleteUser);
+
 router.put("/:id/password", validatePassword, userController.updatePassword);
 router.put("/:id/upload", upload.single("avatar"), userController.uploadProfileImg);
-router.delete("/:id", userController.deleteUser);
 
 export default router;
