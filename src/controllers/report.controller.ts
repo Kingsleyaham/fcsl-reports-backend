@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import reportService from "../services/report.service";
+import { MESSAGES } from "../constants";
 
 class ReportController {
   async fetchAllReports(req: Request, res: Response) {
@@ -43,8 +44,34 @@ class ReportController {
       return res.status(401).json({ error: err.message });
     }
   }
-  async saveReport(req: Request, res: Response) {}
-  async deleteReport(req: Request, res: Response) {}
+  async saveReport(req: Request, res: Response) {
+    try {
+      const report = await reportService.saveReport({ ...req.body, reqFile: req.file });
+      console.log(req.file);
+
+      res.status(201).json({ success: true, message: MESSAGES.UPLOAD_SUCCESS });
+    } catch (err: any) {
+      return res.status(401).json({ error: err.message });
+    }
+  }
+  async deleteReport(req: Request, res: Response) {
+    try {
+      const id = parseInt(req.params.id);
+      await reportService.deleteReport(id);
+      res.status(200).json({ success: true, message: MESSAGES.DELETE_SUCCESS });
+    } catch (err: any) {
+      return res.status(401).json({ error: err.message });
+    }
+  }
+  async deleteSelectedReports(req: Request, res: Response) {
+    try {
+      const reportType = req.params.type;
+      await reportService.deleteReportsByType(reportType);
+      res.status(200).json({ success: true, message: MESSAGES.DELETE_SUCCESS });
+    } catch (err: any) {
+      return res.status(401).json({ error: err.message });
+    }
+  }
 }
 
 export default new ReportController();

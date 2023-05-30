@@ -10,8 +10,7 @@ interface IReqFile {
 }
 
 export interface IReport {
-  name: string;
-  type: string;
-  year: number;
   reqFile: IReqFile;
+  reportType: string;
+  year: number | string;
 }

@@ -10,7 +10,7 @@ import sequelize from "../database";
 class Report extends Model<InferAttributes<Report>, InferCreationAttributes<Report>> {
   declare id: CreationOptional<number>;
   declare name: string;
-  declare type: string;
+  declare reportType: string;
   declare year: number;
   declare reportUrl: string;
   declare createdAt: CreationOptional<Date>;
@@ -28,7 +28,7 @@ Report.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    type: {
+    reportType: {
       type: DataTypes.STRING,
       allowNull: false,
       comment: '"daily", "weekly", "monthly"',

@@ -1,32 +1,32 @@
 import { NextFunction, Request, Response } from "express";
 import multer from "multer";
+import path from "path";
 
 const fileFilter = (req: Request, file: Express.Multer.File, cb: any) => {
-  if (
-    file.mimetype == "image/png" ||
-    file.mimetype == "image/jpg" ||
-    file.mimetype == "image/jpeg"
-  ) {
+  if (file.mimetype == "application/pdf") {
+    console.log(file);
     cb(null, true);
   } else {
+    console.log(file);
+
     cb(null, false);
-    return cb(new Error("only .png, .jpg and .jpeg format allowed"));
+    return cb(new Error("only .pdf files are allowed"));
   }
 };
 
 const fileName = (req: Request, file: Express.Multer.File, cb: any) => {
   const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-  const ext = file.mimetype.split("/")[1];
-  cb(null, `${file.fieldname.replace("[]", "")}-${uniqueSuffix}.${ext}`);
+
+  cb(null, `${uniqueSuffix}-${file.originalname}`);
 };
 
 const storage = multer.diskStorage({
-  destination: "./src/assets/uploads",
+  destination: path.join(process.cwd(), "/src/assets/uploads"),
   filename: fileName,
 });
 
 export const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 1 * 1024 * 1024 },
+  limits: { fileSize: 256 * 1024 * 1024 },
 });

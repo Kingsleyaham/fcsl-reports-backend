@@ -7,16 +7,30 @@ import helmet from "helmet";
 import router from "./routes";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import credentials from "./middlewares/credentials.middleware";
+import allowedOrigins from "./config/cors.config";
 
 const app = express();
 dotenv.config();
 
 // middlewares
+app.use(credentials); //handles options credentials check - before cors
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
-app.use(cors()); // Allows incoming requests from any ip
+// Cross Origin Resource Sharing
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (allowedOrigins.indexOf(origin!) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
 
 // routes
 app.use("/api", router);

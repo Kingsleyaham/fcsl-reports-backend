@@ -11,17 +11,17 @@ interface ITokenProps {
 
 class AuthService {
   async generateAccessToken(user: ITokenProps) {
-    const token = jwt.sign({ ...user }, jwtConfig.ACCESS_TOKEN_SECRET, { expiresIn: "30s" });
+    const token = jwt.sign({ ...user }, jwtConfig.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
 
-    return { accessToken: token };
+    return { token };
   }
 
   async generateRefreshToken(user: ITokenProps) {
-    return jwt.sign({ user }, jwtConfig.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
+    return jwt.sign({ user }, jwtConfig.REFRESH_TOKEN_SECRET, { expiresIn: "3d" });
   }
 
   async setCookie(value: string, res: Response) {
-    const expire = 24 * 7 * 60 * 60 * 1000;
+    const expire = 3 * 24 * 60 * 60 * 1000;
 
     return res.cookie("jwt", value, {
       httpOnly: true,
@@ -45,11 +45,19 @@ class AuthService {
 
     await this.setCookie(refreshToken, res);
 
-    return this.generateAccessToken({ id: user.id, email: user.email });
+    const token = await this.generateAccessToken({ id: user.id, email: user.email });
+
+    const newUser = await userService.findById(user.id);
+
+    return { ...token, user: newUser };
   }
 
   async logout(res: Response) {
-    return res.cookie("jwt", "", { maxAge: 1 });
+    return res.clearCookie("jwt", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
   }
 }
 
