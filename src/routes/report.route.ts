@@ -1,11 +1,11 @@
 import { Router } from "express";
 import reportController from "../controllers/report.controller";
-import { upload } from "../middlewares/fileUpload.middleware";
+import { fileUpload } from "../middlewares/fileUpload.middleware";
 
 const router = Router();
 
 router.get("/", reportController.fetchAllReports);
-router.post("/", upload.single("report"), reportController.saveReport);
+router.post("/", fileUpload.single("report"), reportController.saveReport);
 router.get("/daily", reportController.fetchDailyReports);
 router.get("/weekly", reportController.fetchWeeklyReports);
 router.get("/monthly", reportController.fetchMonthlyReports);

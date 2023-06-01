@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import userService from "../services/user.service";
 import { MESSAGES } from "../constants";
+import { IReqFile } from "../interfaces/report.interface";
 
 class UserController {
   async findAll(req: Request, res: Response) {
@@ -46,12 +47,25 @@ class UserController {
     }
   }
 
-  async uploadProfileImg(req: Request, res: Response) {}
+  async uploadProfileImg(req: Request, res: Response) {
+    try {
+      const userId = parseInt(req.body.userId);
+      const reqFile = req.file as IReqFile;
+
+      const user = await userService.uploadAvatar(userId, reqFile);
+
+      res.status(200).json({ success: true, user });
+    } catch (err: any) {
+      return res.status(401).json({ error: err.message });
+    }
+  }
 
   async deleteUser(req: Request, res: Response) {
     try {
       const id = parseInt(req.params.id);
+
       await userService.deleteUser(id);
+
       return res.status(200).json({ success: true, message: MESSAGES.DELETED });
     } catch (err: any) {
       return res.status(401).json({ error: err.message });

@@ -1,5 +1,4 @@
 import { requireAuth } from "./../middlewares/auth.middleware";
-import { upload } from "./../middlewares/fileUpload.middleware";
 import { Router } from "express";
 import authRoute from "./auth.route";
 import userRoute from "./user.route";

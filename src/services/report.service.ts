@@ -1,8 +1,11 @@
+import { appConfig } from "../config";
 import sequelize from "../database";
 import { IReport } from "./../interfaces/report.interface";
 import Report from "./../models/report.model";
 
 class ReportService {
+  uploadPath = `${appConfig.BASE_URL}/src/assets/uploads`;
+
   async findById(id: number) {
     return Report.findByPk(id);
   }
@@ -33,15 +36,10 @@ class ReportService {
 
   async saveReport(newReport: IReport) {
     const { reqFile, reportType, year } = newReport;
+    const { originalname: name, filename } = reqFile;
+    const reportUrl = `${this.uploadPath}/${filename}`;
 
-    const { path: reportUrl, originalname } = reqFile;
-
-    return Report.create({
-      reportUrl,
-      year: parseInt(year as string),
-      reportType,
-      name: originalname,
-    });
+    return Report.create({ reportUrl, year: parseInt(year as string), reportType, name });
   }
 
   async deleteReport(id: number) {
