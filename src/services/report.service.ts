@@ -1,3 +1,4 @@
+import path from "path";
 import { appConfig } from "../config";
 import sequelize from "../database";
 import { IReport } from "./../interfaces/report.interface";
@@ -37,7 +38,7 @@ class ReportService {
   async saveReport(newReport: IReport) {
     const { reqFile, reportType, year } = newReport;
     const { originalname: name, filename } = reqFile;
-    const reportUrl = `${this.uploadPath}/${filename}`;
+    const reportUrl = path.join(__dirname, `../assets/uploads/reports/${filename}`);
 
     return Report.create({ reportUrl, year: parseInt(year as string), reportType, name });
   }
