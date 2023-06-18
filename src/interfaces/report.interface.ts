@@ -1,4 +1,4 @@
-interface IReqFile {
+export interface IReqFile {
   fieldname: string;
   originalname: string;
   encoding: string;

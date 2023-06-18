@@ -3,14 +3,15 @@ import multer from "multer";
 import path from "path";
 
 const fileFilter = (req: Request, file: Express.Multer.File, cb: any) => {
-  if (file.mimetype == "application/pdf") {
-    console.log(file);
+  if (
+    file.mimetype == "image/png" ||
+    file.mimetype == "image/jpg" ||
+    file.mimetype == "image/jpeg"
+  ) {
     cb(null, true);
   } else {
-    console.log(file);
-
     cb(null, false);
-    return cb(new Error("only .pdf files are allowed"));
+    return cb(new Error("only .png, .jpg and .jpeg format allowed"));
   }
 };
 
@@ -21,12 +22,12 @@ const fileName = (req: Request, file: Express.Multer.File, cb: any) => {
 };
 
 const storage = multer.diskStorage({
-  destination: path.join(process.cwd(), "/src/assets/uploads/reports"),
+  destination: path.join(process.cwd(), "/src/assets/uploads/avatars"),
   filename: fileName,
 });
 
-export const fileUpload = multer({
+export const avatarUpload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 256 * 1024 * 1024 },
+  limits: { fileSize: 1024 * 1024 },
 });

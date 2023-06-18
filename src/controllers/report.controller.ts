@@ -47,7 +47,6 @@ class ReportController {
   async saveReport(req: Request, res: Response) {
     try {
       const report = await reportService.saveReport({ ...req.body, reqFile: req.file });
-      console.log(req.file);
 
       res.status(201).json({ success: true, message: MESSAGES.UPLOAD_SUCCESS });
     } catch (err: any) {

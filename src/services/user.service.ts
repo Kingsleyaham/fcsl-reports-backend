@@ -1,6 +1,7 @@
 import { passwordHash } from "./../utils/password.util";
 import { ISignup } from "../interfaces/signup.interface";
 import User from "./../models/user.model";
+import { IReqFile } from "../interfaces/report.interface";
 
 class UserService {
   async findById(id: number) {
@@ -46,6 +47,15 @@ class UserService {
     const hashedPwd = await passwordHash(password);
 
     return User.update({ password: hashedPwd }, { where: { id } });
+  }
+
+  async uploadAvatar(id: number, reqFile: IReqFile) {
+    const { filename } = reqFile;
+    const userExist = await this.findById(id);
+
+    if (!userExist) throw new Error("user not found");
+
+    return User.update({ imgUrl: filename }, { where: { id } });
   }
 
   async deleteUser(id: number) {
